@@ -32,10 +32,10 @@ class SerialDevice :
 
         try:
             self.serial_dev.write(command)
-        except serial.SerialException as e:
-            print("Serial exception!")
         except serial.SerialTimeoutException as et:
             print("Serial timeout exception!")
+        except serial.SerialException as e:
+            print("Serial exception!")
 
     def get_response(self):
         response=""
