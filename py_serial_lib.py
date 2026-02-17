@@ -14,12 +14,15 @@ class SerialDevice :
         self.port = port
         self.baudrate = baudrate
         self.timeout=timeout
-        self.serial_dev = serial.Serial(port=self.port,
+        try:
+            self.serial_dev = serial.Serial(port=self.port,
                                         baudrate=self.baudrate,
                                         bytesize=serial.EIGHTBITS,
                                         parity=serial.PARITY_NONE,
                                         stopbits=serial.STOPBITS_ONE,
                                         timeout=self.timeout)
+        except serial.SerialException as e:
+            print("Serial exception!")
 
     def close(self):
         self.serial_dev.close()
@@ -30,8 +33,9 @@ class SerialDevice :
         try:
             self.serial_dev.write(command)
         except serial.SerialException as e:
-            # tmp
             print("Serial exception!")
+        except serial.SerialTimeoutException as et:
+            print("Serial timeout exception!")
 
     def get_response(self):
         response=""
