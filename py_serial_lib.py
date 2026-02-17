@@ -1,5 +1,6 @@
-# version 1.0
+# version 1.01
 # uses pyserial
+# install command: sudo apt install python3-serial
 import serial
 
 class SerialDevice :
