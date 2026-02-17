@@ -1,4 +1,4 @@
-# version 1.01
+# version 1.05
 # uses pyserial
 # install command: sudo apt install python3-serial
 import serial
