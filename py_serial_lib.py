@@ -1,4 +1,4 @@
-# version 1.2
+# version 1.21
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
@@ -11,7 +11,7 @@ class SerialDevice :
     encoding = "utf-8"
     # serial_dev
 
-    # 0 no error, 1 timeout, 2 common serial error
+    # 0 no error, 1 timeout, 2 common serial error 3 obj not initialised
     err_code = 0
     err_description = ""
 
