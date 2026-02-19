@@ -1,4 +1,4 @@
-# version 1.1
+# version 1.2
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
