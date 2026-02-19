@@ -1,4 +1,4 @@
-# version 1.06
+# version 1.1
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
@@ -13,12 +13,17 @@ class SerialDevice :
 
     # 0 no error, 1 timeout, 2 common serial error
     err_code = 0
+    err_description = ""
 
-    def get_error(self):
+    def get_error_code(self):
         return self.err_code
 
-    def set_error(self, code):
+    def get_error_description(self):
+        return self.err_description
+
+    def set_error(self, code, description = ""):
         self.err_code = code
+        self.err_description = description
 
     def __init__(self, port="/dev/ttyUSB0", baudrate=9600, timeout=3) :
         self.port = port
@@ -31,27 +36,35 @@ class SerialDevice :
                                         parity=serial.PARITY_NONE,
                                         stopbits=serial.STOPBITS_ONE,
                                         timeout=self.timeout)
+
         except serial.SerialTimeoutException as te:
-            self.set_error(1)
+            self.set_error(1, te.strerror)
             print("Serial timeout exception!")
         except serial.SerialException as e:
-            self.set_error(2)
+            self.set_error(2, e.strerror)
             print("Serial exception!")
 
     def close(self):
-        self.serial_dev.close()
+        try:
+            self.serial_dev.close()
+        except AttributeError as ae:
+            self.set_error(3, ae.name)
+            print("Attribute error exception!")
 
     def send(self, str_data):
         command = str_data.encode(self.encoding)
         self.set_error(0)
         try:
             self.serial_dev.write(command)
-        except serial.SerialTimeoutException as et:
-            self.set_error(1)
+        except serial.SerialTimeoutException as te:
+            self.set_error(1, te.strerror)
             print("Serial timeout exception!")
         except serial.SerialException as e:
-            self.set_error(2)
+            self.set_error(2, e.strerror)
             print("Serial exception!")
+        except AttributeError as ae:
+            self.set_error(3, ae.name)
+            print("Attribute error exception!")
 
     def get_response(self):
         response=""
@@ -59,9 +72,12 @@ class SerialDevice :
         try:
             response=self.serial_dev.readline().decode(self.encoding).strip() #arduino finish string with \n
         except serial.SerialTimeoutException as te:
-            self.set_error(1)
+            self.set_error(1, te.strerror)
             print("Serial timeout exception!")
         except serial.SerialException as e:
-            self.set_error(2)
+            self.set_error(2, e.strerror)
             print("Serial exception!")
+        except AttributeError as ae:
+            self.set_error(3, ae.name)
+            print("Attribute error exception!")
         return response
