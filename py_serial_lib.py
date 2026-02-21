@@ -1,4 +1,4 @@
-# version 1.22
+# version 1.23
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
@@ -8,8 +8,9 @@
 
 import serial
 
-class SerialDevice :
-    port =""
+
+class SerialDevice:
+    port = ""
     baudrate = 9600
     timeout = 1
     encoding = "utf-8"
@@ -25,21 +26,23 @@ class SerialDevice :
     def get_error_description(self):
         return self.err_description
 
-    def set_error(self, code, description = ""):
+    def set_error(self, code, description=""):
         self.err_code = code
         self.err_description = description
 
-    def __init__(self, port="/dev/ttyUSB0", baudrate=9600, timeout=3) :
+    def __init__(self, port="/dev/ttyUSB0", baudrate=9600, timeout=3):
         self.port = port
         self.baudrate = baudrate
-        self.timeout=timeout
+        self.timeout = timeout
         try:
-            self.serial_dev = serial.Serial(port=self.port,
-                                        baudrate=self.baudrate,
-                                        bytesize=serial.EIGHTBITS,
-                                        parity=serial.PARITY_NONE,
-                                        stopbits=serial.STOPBITS_ONE,
-                                        timeout=self.timeout)
+            self.serial_dev = serial.Serial(
+                port=self.port,
+                baudrate=self.baudrate,
+                bytesize=serial.EIGHTBITS,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                timeout=self.timeout,
+            )
 
         except serial.SerialTimeoutException as te:
             self.set_error(1, te.strerror)
@@ -71,10 +74,12 @@ class SerialDevice :
             print("Attribute error exception!")
 
     def get_response(self):
-        response=""
+        response = ""
         self.set_error(0)
         try:
-            response=self.serial_dev.readline().decode(self.encoding).strip() #arduino finish string with \n
+            response = (
+                self.serial_dev.readline().decode(self.encoding).strip()
+            )  # arduino finish string with \n
         except serial.SerialTimeoutException as te:
             self.set_error(1, te.strerror)
             print("Serial timeout exception!")
