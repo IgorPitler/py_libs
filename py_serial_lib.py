@@ -1,7 +1,11 @@
-# version 1.21
+# version 1.22
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
+
+# TO DO list:
+# 1. add error logging to files?
+
 import serial
 
 class SerialDevice :
