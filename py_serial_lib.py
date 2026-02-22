@@ -1,6 +1,6 @@
 """Модуль для работы с последовательным портом"""
 
-# version 1.24
+# version 1.25
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
@@ -27,7 +27,7 @@ class SerialDevice:
     def get_error_code(self) -> int:
         """Получение сохраненного в объекте кода ошибки в целочисленном виде"""
 
-        return self.err_code
+        return self.err_codey
 
     def get_error_description(self) -> str:
         """Получение сохраненного в объекте описания ошибки в виде строки"""
@@ -42,7 +42,7 @@ class SerialDevice:
     def __init__(
         self, port: str = "/dev/ttyUSB0", baudrate: int = 9600, timeout: int = 3
     ):
-        """Конструктор. Инициализация последовательного порта."""
+
         self.port = port
         self.baudrate = baudrate
         self.timeout = timeout
