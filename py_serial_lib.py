@@ -1,4 +1,6 @@
-# version 1.23
+"""Модуль для работы с последовательным портом"""
+
+# version 1.24
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
@@ -10,6 +12,8 @@ import serial
 
 
 class SerialDevice:
+    """Класс для работы с последовательным портом. Отправка и чтение данных происходят в строковом виде."""
+
     port = ""
     baudrate = 9600
     timeout = 1
@@ -20,17 +24,25 @@ class SerialDevice:
     err_code = 0
     err_description = ""
 
-    def get_error_code(self):
+    def get_error_code(self) -> int:
+        """Получение сохраненного в объекте кода ошибки в целочисленном виде"""
+
         return self.err_code
 
-    def get_error_description(self):
+    def get_error_description(self) -> str:
+        """Получение сохраненного в объекте описания ошибки в виде строки"""
+
         return self.err_description
 
-    def set_error(self, code, description=""):
+    def set_error(self, code: int, description: str = ""):
+        """Сохранение кода и описания ошибки во внутренней переменной класса"""
         self.err_code = code
         self.err_description = description
 
-    def __init__(self, port="/dev/ttyUSB0", baudrate=9600, timeout=3):
+    def __init__(
+        self, port: str = "/dev/ttyUSB0", baudrate: int = 9600, timeout: int = 3
+    ):
+        """Конструктор. Инициализация последовательного порта."""
         self.port = port
         self.baudrate = baudrate
         self.timeout = timeout
@@ -52,13 +64,17 @@ class SerialDevice:
             print("Serial exception!")
 
     def close(self):
+        """Закрыть порт"""
         try:
             self.serial_dev.close()
         except AttributeError as ae:
             self.set_error(3, ae.name)
-            print("Attribute error exception!")
+            print(
+                "Attribute error exception!"
+            )  # возникает при неудачной инициализации порта
 
-    def send(self, str_data):
+    def send(self, str_data: str):
+        """Отправка строки в порт"""
         command = str_data.encode(self.encoding)
         self.set_error(0)
         try:
@@ -73,13 +89,14 @@ class SerialDevice:
             self.set_error(3, ae.name)
             print("Attribute error exception!")
 
-    def get_response(self):
+    def get_response(self) -> str:
+        """Чтение строки из порта"""
         response = ""
         self.set_error(0)
         try:
             response = (
                 self.serial_dev.readline().decode(self.encoding).strip()
-            )  # arduino finish string with \n
+            )  # arduino finish string with \n !
         except serial.SerialTimeoutException as te:
             self.set_error(1, te.strerror)
             print("Serial timeout exception!")
