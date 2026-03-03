@@ -1,6 +1,6 @@
 """Модуль для работы с последовательным портом"""
 
-# version 1.25
+# version 1.26
 # by Igor Pitler
 # uses pyserial
 # install command: sudo apt install python3-serial
@@ -27,7 +27,7 @@ class SerialDevice:
     def get_error_code(self) -> int:
         """Получение сохраненного в объекте кода ошибки в целочисленном виде"""
 
-        return self.err_codey
+        return self.err_code
 
     def get_error_description(self) -> str:
         """Получение сохраненного в объекте описания ошибки в виде строки"""
